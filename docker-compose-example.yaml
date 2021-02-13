@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+
+  fromJacoco2Cobertura:
+    image: marcellodesales/cover2cover
+    volumes:
+      - ./:/app
+    environment:
+      - SRC_MAIN_JAVA_DIR=/app/src/main/java
+      - JACOCO_XML=/app/build/reports/jacoco/test/jacocoTestReport.xml
+      - COBERTURA_XML_FILE=/app/build/reports/cobertura.xml
