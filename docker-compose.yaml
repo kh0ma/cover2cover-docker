@@ -1,0 +1,7 @@
+version: "3.8"
+
+services:
+
+  cover2cover:
+    image: marcellodesales/cover2cover
+    build: .

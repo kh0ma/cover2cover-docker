@@ -23,6 +23,58 @@ Cobertura Jenkins plugin to track coverage.
 
 Not every feature is supported, but close enough.
 
+# Dockerized steps
+
+* Just run the command against your source-code in a container
+
+* `JACOCO_XML`: the `jacoco.xml` file
+* `SRC_MAIN_JAVA_DIR`: the app sources
+* `COBERTURA_XML_FILE`: the desired covertura.xml file to be created
+
+```console
+$ docker run -ti -v $(pwd):/app \
+             -e JACOCO_XML=/app/build/reports/jacoco/test/jacocoTestReport.xml \
+             -e SRC_MAIN_JAVA_DIR=/app/src/main/java \
+             -e COBERTURA_XML_FILE=/app/build/reports/cobertura.xml \
+             marcellodesales/cover2cover
+```
+
+## Docker-Compose
+
+* After you generate the tests, adjust the paths to the vars
+
+```yaml
+version: "3.8"
+
+services:
+
+  fromJacoco2Cobertura:
+    image: marcellodesales/cover2cover
+    volumes:
+      - ./:/app
+    environment:
+      - SRC_MAIN_JAVA_DIR=/app/src/main/java
+      - JACOCO_XML=/app/build/reports/jacoco/test/jacocoTestReport.xml
+      - COBERTURA_XML_FILE=/app/build/reports/cobertura.xml
+```
+
+* Generate the coverage just executing docker-compose
+
+```console
+$ docker-compose -f docker-compose-example.yaml up
+WARNING: Found orphan containers (distance-matrix-service_distance-matrix-service-tests_1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.
+Starting distance-matrix-service_fromJacoco2Cobertura_1 ... done
+Attaching to distance-matrix-service_fromJacoco2Cobertura_1
+distance-matrix-service_fromJacoco2Cobertura_1 exited with code 0
+```
+
+* Make sure the file exists outside the container
+
+```console
+$ ls -la build/reports/cobertura.xml
+-rw-r--r--  1 marcellodesales  staff  29722 Feb 13 08:59 build/reports/cobertura.xml
+```
+
 ## Usage
 
 Add the following "post step" to your Jenkins build:
