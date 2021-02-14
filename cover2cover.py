@@ -143,7 +143,10 @@ def jacoco2cobertura(filename, source_roots):
     into = ET.Element('coverage')
     convert_root(root, into, source_roots)
     print('<?xml version="1.0" ?>')
-    print(ET.tostring(into))
+
+    # https://stackoverflow.com/questions/6269765/what-does-the-b-character-do-in-front-of-a-string-literal/64888651#64888651
+    # Add decode for python3
+    print(ET.tostring(into).decode())
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
