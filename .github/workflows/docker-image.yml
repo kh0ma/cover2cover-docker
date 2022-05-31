@@ -1,0 +1,70 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    - name: Docker Login
+      # You may pin to the exact commit or the version.
+      # uses: docker/login-action@adb73476b6e06caddec5db0bc1deacbec8cdd947
+      uses: docker/login-action@v1.6.0
+      with:
+        # Username used to log against the Docker registry
+        username: ${{ secrets.DOCKER_USERNAME }}
+        # Password or personal access token used to log against the Docker registry
+        password: ${{ secrets.DOCKER_TOKEN }}
+    - name: Build and push Docker images
+      # You may pin to the exact commit or the version.
+      # uses: docker/build-push-action@41a004098f667d254862fb7c94f8eb7b5f8bb31d
+      uses: docker/build-push-action@v2.0.1
+      with:
+#         # Builder instance
+#         builder: # optional
+#         # Build's context is the set of files located in the specified PATH or URL
+#         context: # optional
+#         # Path to the Dockerfile
+#         file: # optional, default is ./Dockerfile
+#         # List of build-time variables
+#         build-args: # optional
+#         # List of metadata for an image
+#         labels: # optional
+#         # List of tags
+          tags: ${{ secrets.DOCKER_USERNAME }}/cover2cover-docker:1.0.1 # optional
+#         # Always attempt to pull a newer version of the image
+#         pull: # optional, default is false
+#         # Sets the target stage to build
+#         target: # optional
+#         # List of extra privileged entitlement (eg. network.host,security.insecure)
+#         allow: # optional
+#         # Do not use cache when building the image
+#         no-cache: # optional, default is false
+#         # List of target platforms for build
+#         platforms: # optional
+#         # Load is a shorthand for --output=type=docker
+#         load: # optional, default is false
+#         # Push is a shorthand for --output=type=registry
+          push: true # optional, default is false
+#         # List of output destinations (format: type=local,dest=path)
+#         outputs: # optional
+#         # List of external cache sources for buildx (eg. user/app:cache, type=local,src=path/to/dir)
+#         cache-from: # optional
+#         # List of cache export destinations for buildx (eg. user/app:cache, type=local,dest=path/to/dir)
+#         cache-to: # optional
+#         # List of secrets to expose to the build (eg. key=value, GIT_AUTH_TOKEN=mytoken)
+#         secrets: # optional
+#         # GitHub Token used to authenticate against a repository for Git context
+#         github-token: # optional, default is ${{ github.token }}
+
+  
