@@ -131,6 +131,11 @@ def convert_root(source, target, source_roots):
     for package in source.findall('package'):
         packages.append(convert_package(package))
 
+    # Also walk through groups in aggregated jacoco report
+    for group in source.findall('group'):
+      for package in group.findall('package'):
+          packages.append(convert_package(package))
+
     add_counters(source, target)
 
 def jacoco2cobertura(filename, source_roots):
